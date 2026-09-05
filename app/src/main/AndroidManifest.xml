@@ -24,3 +24,5 @@
 </application>
 
 </manifest>
+
+android:icon="@mipmap/ic_launcher"
