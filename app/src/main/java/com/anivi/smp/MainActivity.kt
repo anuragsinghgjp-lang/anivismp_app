@@ -1,4 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.anivi.smp
+
+import androidx.compose.material3.ExperimentalMaterial3Api
 
 import android.content.ClipData
 import android.content.ClipboardManager
