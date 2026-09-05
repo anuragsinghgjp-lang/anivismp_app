@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.anivi.smp"
 
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.anivi.smp"
