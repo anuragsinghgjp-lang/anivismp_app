@@ -4,7 +4,7 @@
     android:allowBackup="true"
     android:label="ANIVI SMP"
     android:supportsRtl="true"
-    android:icon="@drawable/anivi_logo"
+    android:icon="@mipmap/ic_launcher"
     android:theme="@style/Theme.ANIVISMP">
 
     <activity
