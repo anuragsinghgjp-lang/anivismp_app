@@ -626,7 +626,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/ehF7HTTqkq"))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/V2YK4kvm53"))
                             context.startActivity(intent)
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -724,7 +724,7 @@ fun ShopScreen() {
         item {
             Button(
                 onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/ehF7HTTqkq"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/V2YK4kvm53"))
                     context.startActivity(intent)
                 },
                 modifier = Modifier.fillMaxWidth(),
