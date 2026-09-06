@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26920715065",
+    "project_id": "anivi-smp",
+    "storage_bucket": "anivi-smp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26920715065:android:257c05319323db166a5ee8",
+        "android_client_info": {
+          "package_name": "com.anivi.smp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7SvqSDt_NAxSAi0sz_wNtlSc_TQzukoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
