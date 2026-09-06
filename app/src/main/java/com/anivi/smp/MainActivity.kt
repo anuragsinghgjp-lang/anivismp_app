@@ -444,12 +444,21 @@ fun HomeScreen(authManager: AuthManager) {
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        ign = authManager.getIGN() ?: "Player"
-        coroutineScope.launch {
-            isChecking = true
-            isOnline = getServerStatus("anivismp.aternos.me", 25565)
-            isChecking = false
-        }
+
+    authManager.getIGN { playerName ->
+        ign = playerName
+    }
+
+    coroutineScope.launch {
+        isChecking = true
+
+        isOnline = getServerStatus(
+            "anivismp.aternos.me",
+            25565
+        )
+
+        isChecking = false
+    }
     }
 
     LazyColumn(
