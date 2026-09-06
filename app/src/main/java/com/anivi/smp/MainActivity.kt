@@ -260,7 +260,7 @@ fun AuthScreen(
                             return@Button
                         }
                         isLoading = true
-                        authManager.register(email, password, ign) { success, msg ->
+                        authManager.register(ign, email.trim(), password) { success, msg ->
                             isLoading = false
                             if (success) onAuthSuccess() else errorMessage = msg ?: "Registration failed"
                         }
