@@ -8,8 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,10 +28,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Rule
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -40,14 +53,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PasswordVisualTransformation
-import androidx.compose.material3.VisualTransformation
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.darkColorScheme
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,9 +68,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -68,11 +81,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+
 import okhttp3.OkHttpClient
 import okhttp3.Request
+
 import org.json.JSONObject
 
 const val SERVER_IP = "anivismp.aternos.me"
@@ -113,6 +129,7 @@ fun ANIVISMPApp() {
             surface = Color(0xFF151821)
         )
     ) {
+
         if (isLoading) {
             LoadingScreen()
         } else {
@@ -127,9 +144,16 @@ fun LoadingScreen() {
     var dots by remember { mutableIntStateOf(1) }
 
     LaunchedEffect(Unit) {
+
         while (true) {
+
             delay(500)
-            dots = if (dots >= 3) 1 else dots + 1
+
+            dots = if (dots >= 3) {
+                1
+            } else {
+                dots + 1
+            }
         }
     }
 
@@ -191,7 +215,9 @@ fun LoadingScreen() {
 @Composable
 fun AuthGate() {
 
-    val authManager = remember { AuthManager() }
+    val authManager = remember {
+        AuthManager()
+    }
 
     var loggedIn by remember {
         mutableStateOf(authManager.isLoggedIn())
@@ -200,6 +226,7 @@ fun AuthGate() {
     if (loggedIn) {
 
         MainAppScreen(
+            authManager = authManager,
             onLogout = {
                 authManager.logout()
                 loggedIn = false
@@ -223,21 +250,49 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit
 ) {
 
-    var isRegister by remember { mutableStateOf(false) }
+    var isRegister by remember {
+        mutableStateOf(false)
+    }
 
-    var ign by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    var forgotMode by remember {
+        mutableStateOf(false)
+    }
 
-    var showPassword by remember { mutableStateOf(false) }
-    var showConfirmPassword by remember { mutableStateOf(false) }
+    var ign by remember {
+        mutableStateOf("")
+    }
 
-    var loading by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf("") }
-    var success by remember { mutableStateOf(false) }
+    var email by remember {
+        mutableStateOf("")
+    }
 
-    var forgotMode by remember { mutableStateOf(false) }
+    var password by remember {
+        mutableStateOf("")
+    }
+
+    var confirmPassword by remember {
+        mutableStateOf("")
+    }
+
+    var showPassword by remember {
+        mutableStateOf(false)
+    }
+
+    var showConfirmPassword by remember {
+        mutableStateOf(false)
+    }
+
+    var loading by remember {
+        mutableStateOf(false)
+    }
+
+    var message by remember {
+        mutableStateOf("")
+    }
+
+    var success by remember {
+        mutableStateOf(false)
+    }
 
     val scrollState = rememberScrollState()
 
@@ -276,12 +331,13 @@ fun LoginScreen(
             )
 
             Text(
-                text = if (forgotMode)
-                    "RESET PASSWORD"
-                else if (isRegister)
-                    "CREATE YOUR ACCOUNT"
-                else
-                    "WELCOME BACK",
+                text =
+                    if (forgotMode)
+                        "RESET PASSWORD"
+                    else if (isRegister)
+                        "CREATE YOUR ACCOUNT"
+                    else
+                        "WELCOME BACK",
                 color = Color(0xFF9E9E9E),
                 fontSize = 13.sp
             )
@@ -326,8 +382,13 @@ fun LoginScreen(
                                 message = ""
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Email") },
-                            singleLine = true
+                            label = {
+                                Text("Email")
+                            },
+                            singleLine = true,
+                            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                                keyboardType = KeyboardType.Email
+                            )
                         )
 
                         Spacer(modifier = Modifier.height(18.dp))
@@ -336,14 +397,18 @@ fun LoginScreen(
                             onClick = {
 
                                 if (email.trim().isEmpty()) {
+
                                     message = "Enter your email"
                                     success = false
+
                                     return@Button
                                 }
 
                                 loading = true
 
-                                authManager.resetPassword(email) { ok, result ->
+                                authManager.resetPassword(
+                                    email
+                                ) { ok, result ->
 
                                     loading = false
                                     success = ok
@@ -355,22 +420,27 @@ fun LoginScreen(
                         ) {
 
                             if (loading) {
+
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(20.dp),
                                     strokeWidth = 2.dp
                                 )
+
                             } else {
+
                                 Text("Send Reset Email")
                             }
                         }
 
                         TextButton(
                             onClick = {
+
                                 forgotMode = false
                                 message = ""
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
+
                             Text("← Back to Login")
                         }
 
@@ -385,14 +455,18 @@ fun LoginScreen(
                                     message = ""
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                label = { Text("Minecraft IGN") },
+                                label = {
+                                    Text("Minecraft IGN")
+                                },
                                 placeholder = {
                                     Text("Your Minecraft username")
                                 },
                                 singleLine = true
                             )
 
-                            Spacer(modifier = Modifier.height(14.dp))
+                            Spacer(
+                                modifier = Modifier.height(14.dp)
+                            )
                         }
 
                         OutlinedTextField(
@@ -402,14 +476,19 @@ fun LoginScreen(
                                 message = ""
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Email") },
+                            label = {
+                                Text("Email")
+                            },
                             singleLine = true,
-                            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                                keyboardType = KeyboardType.Email
-                            )
+                            keyboardOptions =
+                                androidx.compose.foundation.text.KeyboardOptions(
+                                    keyboardType = KeyboardType.Email
+                                )
                         )
 
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(
+                            modifier = Modifier.height(14.dp)
+                        )
 
                         OutlinedTextField(
                             value = password,
@@ -418,7 +497,9 @@ fun LoginScreen(
                                 message = ""
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Password") },
+                            label = {
+                                Text("Password")
+                            },
                             singleLine = true,
                             visualTransformation =
                                 if (showPassword)
@@ -426,14 +507,19 @@ fun LoginScreen(
                                 else
                                     PasswordVisualTransformation(),
                             trailingIcon = {
+
                                 TextButton(
                                     onClick = {
-                                        showPassword = !showPassword
+                                        showPassword =
+                                            !showPassword
                                     }
                                 ) {
+
                                     Text(
-                                        if (showPassword) "HIDE"
-                                        else "SHOW"
+                                        if (showPassword)
+                                            "HIDE"
+                                        else
+                                            "SHOW"
                                     )
                                 }
                             }
@@ -441,7 +527,9 @@ fun LoginScreen(
 
                         if (isRegister) {
 
-                            Spacer(modifier = Modifier.height(14.dp))
+                            Spacer(
+                                modifier = Modifier.height(14.dp)
+                            )
 
                             OutlinedTextField(
                                 value = confirmPassword,
@@ -450,7 +538,9 @@ fun LoginScreen(
                                     message = ""
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                label = { Text("Confirm Password") },
+                                label = {
+                                    Text("Confirm Password")
+                                },
                                 singleLine = true,
                                 visualTransformation =
                                     if (showConfirmPassword)
@@ -458,12 +548,14 @@ fun LoginScreen(
                                     else
                                         PasswordVisualTransformation(),
                                 trailingIcon = {
+
                                     TextButton(
                                         onClick = {
                                             showConfirmPassword =
                                                 !showConfirmPassword
                                         }
                                     ) {
+
                                         Text(
                                             if (showConfirmPassword)
                                                 "HIDE"
@@ -475,20 +567,25 @@ fun LoginScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(
+                            modifier = Modifier.height(20.dp)
+                        )
 
                         if (message.isNotEmpty()) {
 
                             Text(
                                 text = message,
-                                color = if (success)
-                                    Color(0xFF00E676)
-                                else
-                                    Color(0xFFFF5252),
+                                color =
+                                    if (success)
+                                        Color(0xFF00E676)
+                                    else
+                                        Color(0xFFFF5252),
                                 fontSize = 14.sp
                             )
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(
+                                modifier = Modifier.height(12.dp)
+                            )
                         }
 
                         Button(
@@ -496,86 +593,42 @@ fun LoginScreen(
 
                                 if (isRegister) {
 
-                                    if (confirmPassword != password) {
-                                        message = "Passwords do not match"
+                                    if (ign.trim().length < 3) {
+
+                                        message =
+                                            "IGN must be at least 3 characters"
+
                                         success = false
+
                                         return@Button
                                     }
 
-                                    loading = true
+                                    if (email.trim().isEmpty()) {
 
-                                    authManager.register(
-                                        ign = ign,
-                                        email = email,
-                                        password = password
-                                    ) { ok, result ->
+                                        message =
+                                            "Enter your email"
 
-                                        loading = false
-                                        success = ok
-                                        message = result
+                                        success = false
 
-                                        if (ok) {
-                                            onLoginSuccess()
-                                        }
+                                        return@Button
                                     }
 
-                                } else {
+                                    if (password.length < 6) {
 
-                                    loading = true
+                                        message =
+                                            "Password must be at least 6 characters"
 
-                                    authManager.login(
-                                        email = email,
-                                        password = password
-                                    ) { ok, result ->
+                                        success = false
 
-                                        loading = false
-                                        success = ok
-                                        message = result
-
-                                        if (ok) {
-                                            onLoginSuccess()
-                                        }
+                                        return@Button
                                     }
-                                }
 
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = !loading
-                        ) {
+                                    if (password != confirmPassword) {
 
-                            if (loading) {
+                                        message =
+                                            "Passwords do not match"
 
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    strokeWidth = 2.dp
-                                )
+                                        success = false
 
-                            } else {
-
-                                Text(
-                                    if (isRegister)
-                                        "Create Account"
-                                    else
-                                        "Login"
-                                )
-                            }
-                        }
-
-                        if (!isRegister) {
-
-                            TextButton(
-                                onClick = {
-                                    forgotMode = true
-                                    message = ""
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text("Forgot Password?")
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        OutlinedButton(
-                            onClick = {
-      
+                                        return@Button
+               
