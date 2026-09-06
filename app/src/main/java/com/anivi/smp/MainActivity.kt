@@ -485,6 +485,57 @@ fun HomeScreen(authManager: AuthManager) {
             }
         }
 
+      item {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = CardBackground
+        ),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "🎡 ANIVI Spin Wheel",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextWhite
+            )
+
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
+
+            Text(
+                text = "Get your free spins and try your luck!",
+                fontSize = 14.sp,
+                color = TextGray
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Button(
+                onClick = {
+                    // Spin Wheel will be opened here
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = PrimaryPurple
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = "🎰 OPEN SPIN WHEEL",
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+      }
+        
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
