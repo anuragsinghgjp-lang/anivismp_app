@@ -428,20 +428,24 @@ fun MainAppScreen(
                 .padding(paddingValues)
         ) {
             when (selectedTab) {
-                0 -> HomeScreen(
-    authManager = authManager,
-    onSpinWheel = {
-        selectedTab = 4
-    }
-)
-                1 -> ServerScreen()
-                2 -> ShopScreen()
-                3 -> RulesScreen()
-                4 -> SpinWheelScreen(
-    onBack = {
-        selectedTab = 0
-    }
-)
+    0 -> HomeScreen(
+        authManager = authManager,
+        onSpinWheel = {
+            selectedTab = 4
+        }
+    )
+
+    1 -> ServerScreen()
+
+    2 -> ShopScreen()
+
+    3 -> RulesScreen()
+
+    4 -> SpinWheelScreen(
+        onBack = {
+            selectedTab = 0
+        }
+    )
             }
         }
     }
