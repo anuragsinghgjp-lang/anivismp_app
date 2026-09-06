@@ -84,6 +84,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun HomeScreen(
+    authManager: AuthManager,
+    onSpinWheel: () -> Unit
+) {
+    
 fun ANIVISMPTheme(content: @Composable () -> Unit) {
     val colorScheme = darkColorScheme(
         primary = PrimaryPurple,
