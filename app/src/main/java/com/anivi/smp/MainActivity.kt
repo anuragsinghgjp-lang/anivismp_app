@@ -531,8 +531,7 @@ fun HomeScreen(
             )
 
             Button(
-               onClick = onSpinWheel,
-                },
+                onClick = onSpinWheel,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = PrimaryPurple
@@ -542,6 +541,11 @@ fun HomeScreen(
                 Text(
                     text = "🎰 OPEN SPIN WHEEL",
                     fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+      }
                 )
             }
         }
