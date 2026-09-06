@@ -436,7 +436,10 @@ fun MainAppScreen(
 // HOME SCREEN
 // --------------------------------------------------
 @Composable
-fun HomeScreen(authManager: AuthManager) {
+fun HomeScreen(
+    authManager: AuthManager,
+    onSpinWheel: () -> Unit
+) {
     val context = LocalContext.current
     var isOnline by remember { mutableStateOf(false) }
     var isChecking by remember { mutableStateOf(true) }
