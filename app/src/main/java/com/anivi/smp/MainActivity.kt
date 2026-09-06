@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 
@@ -28,647 +29,751 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 
+import kotlinx.coroutines.delay
 
 const val SERVER_IP = "anivismp.aternos.me"
 
 const val DISCORD_LINK =
-    "https://discord.gg/ehF7HTTqk"
-
+"https://discord.gg/ehF7HTTqk"
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+override fun onCreate(savedInstanceState: Bundle?) {
 
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
-        setContent {
-
-            ANIVISMPApp()
-        }
+    setContent {
+        ANIVISMPApp()
     }
 }
 
+}
 
 @Composable
 fun ANIVISMPApp() {
 
-    var selectedTab by remember {
+var isLoading by remember {
+    mutableStateOf(true)
+}
 
-        mutableIntStateOf(0)
+LaunchedEffect(Unit) {
+    delay(2500)
+    isLoading = false
+}
+
+MaterialTheme(
+
+    colorScheme = darkColorScheme(
+
+        primary = Color(0xFF7C4DFF),
+
+        secondary = Color(0xFF00E676),
+
+        background = Color(0xFF0B0D12)
+    )
+
+) {
+
+    if (isLoading) {
+
+        LoadingScreen()
+
+    } else {
+
+        MainAppScreen()
     }
+}
 
+}
 
-    val tabs = listOf(
+@Composable
+fun LoadingScreen() {
 
-        "Home",
+var dotCount by remember {
+    mutableIntStateOf(1)
+}
 
-        "Server",
+LaunchedEffect(Unit) {
 
-        "Shop",
+    while (true) {
 
-        "Rules"
-    )
+        delay(450)
 
-
-    val icons = listOf(
-
-        Icons.Default.Home,
-
-        Icons.Default.SportsEsports,
-
-        Icons.Default.ShoppingCart,
-
-        Icons.Default.MenuBook
-    )
-
-
-    MaterialTheme(
-
-        colorScheme = darkColorScheme(
-
-            primary = Color(0xFF7C4DFF),
-
-            secondary = Color(0xFF00E676),
-
-            background = Color(0xFF0B0D12)
-        )
-
-    ) {
-
-
-        Scaffold(
-
-            topBar = {
-
-                CenterAlignedTopAppBar(
-
-                    title = {
-
-                        Text(
-
-                            text = "⚔ ANIVI SMP",
-
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                )
-            },
-
-
-            bottomBar = {
-
-                NavigationBar {
-
-                    tabs.forEachIndexed { index, name ->
-
-                        NavigationBarItem(
-
-                            selected =
-                                selectedTab == index,
-
-                            onClick = {
-
-                                selectedTab = index
-                            },
-
-                            icon = {
-
-                                Icon(
-
-                                    imageVector = icons[index],
-
-                                    contentDescription = name
-                                )
-                            },
-
-                            label = {
-
-                                Text(name)
-                            }
-                        )
-                    }
-                }
-            }
-
-        ) { paddingValues ->
-
-
-            Box(
-
-                modifier = Modifier
-
-                    .fillMaxSize()
-
-                    .padding(paddingValues)
-            ) {
-
-
-                when (selectedTab) {
-
-                    0 -> HomeScreen()
-
-                    1 -> ServerScreen()
-
-                    2 -> ShopScreen()
-
-                    3 -> RulesScreen()
-                }
-            }
+        dotCount = if (dotCount >= 3) {
+            1
+        } else {
+            dotCount + 1
         }
     }
 }
 
+val dots = ".".repeat(dotCount)
+
+Surface(
+    modifier = Modifier.fillMaxSize(),
+
+    color = Color(0xFF0B0D12)
+) {
+
+    Column(
+
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+
+        horizontalAlignment =
+            Alignment.CenterHorizontally,
+
+        verticalArrangement =
+            Arrangement.Center
+    ) {
+
+        Image(
+
+            painter =
+                painterResource(
+                    id = com.anivi.smp.R.drawable.anivi_logo
+                ),
+
+            contentDescription =
+                "ANIVI SMP Logo",
+
+            modifier =
+                Modifier.size(150.dp),
+
+            contentScale =
+                ContentScale.Fit
+        )
+
+        Spacer(
+            modifier =
+                Modifier.height(24.dp)
+        )
+
+        Text(
+
+            text = "⚔ ANIVI SMP",
+
+            style =
+                MaterialTheme.typography.headlineLarge,
+
+            fontWeight =
+                FontWeight.ExtraBold,
+
+            color =
+                Color.White
+        )
+
+        Spacer(
+            modifier =
+                Modifier.height(8.dp)
+        )
+
+        Text(
+
+            text = "YOUR MINECRAFT ADVENTURE",
+
+            style =
+                MaterialTheme.typography.labelLarge,
+
+            color =
+                Color(0xFFBDBDBD)
+        )
+
+        Spacer(
+            modifier =
+                Modifier.height(28.dp)
+        )
+
+        CircularProgressIndicator(
+
+            modifier =
+                Modifier.size(32.dp),
+
+            color =
+                Color(0xFF7C4DFF),
+
+            strokeWidth =
+                3.dp
+        )
+
+        Spacer(
+            modifier =
+                Modifier.height(16.dp)
+        )
+
+        Text(
+
+            text = "LOADING$dots",
+
+            fontWeight =
+                FontWeight.Bold,
+
+            color =
+                Color(0xFF00E676)
+        )
+    }
+}
+
+}
+
+@Composable
+fun MainAppScreen() {
+
+var selectedTab by remember {
+    mutableIntStateOf(0)
+}
+
+val tabs = listOf(
+    "Home",
+    "Server",
+    "Shop",
+    "Rules"
+)
+
+val icons = listOf(
+
+    Icons.Default.Home,
+
+    Icons.Default.SportsEsports,
+
+    Icons.Default.ShoppingCart,
+
+    Icons.Default.MenuBook
+)
+
+Scaffold(
+
+    topBar = {
+
+        CenterAlignedTopAppBar(
+
+            title = {
+
+                Text(
+
+                    text = "⚔ ANIVI SMP",
+
+                    fontWeight =
+                        FontWeight.Bold
+                )
+            }
+        )
+    },
+
+    bottomBar = {
+
+        NavigationBar {
+
+            tabs.forEachIndexed { index, name ->
+
+                NavigationBarItem(
+
+                    selected =
+                        selectedTab == index,
+
+                    onClick = {
+
+                        selectedTab = index
+                    },
+
+                    icon = {
+
+                        Icon(
+
+                            imageVector =
+                                icons[index],
+
+                            contentDescription =
+                                name
+                        )
+                    },
+
+                    label = {
+
+                        Text(name)
+                    }
+                )
+            }
+        }
+    }
+
+) { paddingValues ->
+
+    Box(
+
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+
+        when (selectedTab) {
+
+            0 -> HomeScreen()
+
+            1 -> ServerScreen()
+
+            2 -> ShopScreen()
+
+            3 -> RulesScreen()
+        }
+    }
+}
+
+}
 
 @Composable
 fun HomeScreen() {
 
-    val context = LocalContext.current
+val context = LocalContext.current
 
+LazyColumn(
 
-    LazyColumn(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp),
 
-        modifier = Modifier
+    verticalArrangement =
+        Arrangement.spacedBy(16.dp)
+) {
 
-            .fillMaxSize()
+    item {
 
-            .padding(20.dp),
+        Card(
+            modifier =
+                Modifier.fillMaxWidth()
+        ) {
 
-        verticalArrangement =
-            Arrangement.spacedBy(16.dp)
-    ) {
+            Column(
 
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth(),
 
-        item {
-
-            Card(
-
-                modifier =
-                    Modifier.fillMaxWidth()
+                horizontalAlignment =
+                    Alignment.CenterHorizontally
             ) {
 
+                Text(
 
-                Column(
+                    text = "⚔ ANIVI SMP",
 
-                    modifier = Modifier
+                    style =
+                        MaterialTheme.typography.headlineLarge,
 
-                        .padding(24.dp)
+                    fontWeight =
+                        FontWeight.ExtraBold
+                )
 
-                        .fillMaxWidth(),
+                Spacer(
+                    modifier =
+                        Modifier.height(8.dp)
+                )
 
-                    horizontalAlignment =
-                        Alignment.CenterHorizontally
+                Text(
+                    text =
+                        "Your Minecraft adventure starts here!"
+                )
+
+                Spacer(
+                    modifier =
+                        Modifier.height(20.dp)
+                )
+
+                Button(
+
+                    onClick = {
+                        copyIP(context)
+                    }
+
                 ) {
 
-
                     Text(
-
-                        text = "⚔ ANIVI SMP",
-
-                        style =
-                            MaterialTheme.typography.headlineLarge,
-
-                        fontWeight =
-                            FontWeight.ExtraBold
+                        "📋 COPY SERVER IP"
                     )
-
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(8.dp)
-                    )
-
-
-                    Text(
-
-                        text =
-                            "Your Minecraft adventure starts here!"
-                    )
-
-
-                    Spacer(
-                        modifier =
-                            Modifier.height(20.dp)
-                    )
-
-
-                    Button(
-
-                        onClick = {
-
-                            copyIP(context)
-                        }
-                    ) {
-
-                        Text(
-                            "📋 COPY SERVER IP"
-                        )
-                    }
                 }
             }
         }
+    }
 
+    item {
 
-        item {
+        InfoCard(
 
-            InfoCard(
+            title = "🎮 SERVER",
 
-                title = "🎮 SERVER",
+            value = SERVER_IP,
 
-                value = SERVER_IP,
+            subtitle =
+                "Minecraft Server"
+        )
+    }
 
-                subtitle =
-                    "Minecraft Server"
+    item {
+
+        Button(
+
+            modifier =
+                Modifier.fillMaxWidth(),
+
+            onClick = {
+
+                openLink(
+                    context,
+                    DISCORD_LINK
+                )
+            }
+
+        ) {
+
+            Text(
+                "💬 JOIN DISCORD"
             )
         }
+    }
 
+    item {
 
-        item {
+        OutlinedButton(
 
-            Button(
+            modifier =
+                Modifier.fillMaxWidth(),
 
-                modifier =
-                    Modifier.fillMaxWidth(),
+            onClick = {
 
-                onClick = {
+                Toast.makeText(
 
-                    openLink(
-                        context,
-                        DISCORD_LINK
-                    )
-                }
-            ) {
+                    context,
 
-                Text(
-                    "💬 JOIN DISCORD"
-                )
+                    "Shop coming soon!",
+
+                    Toast.LENGTH_SHORT
+
+                ).show()
             }
-        }
 
+        ) {
 
-        item {
-
-            OutlinedButton(
-
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                onClick = {
-
-                    Toast.makeText(
-
-                        context,
-
-                        "Shop coming soon!",
-
-                        Toast.LENGTH_SHORT
-
-                    ).show()
-                }
-            ) {
-
-                Text(
-                    "🛒 OPEN SHOP"
-                )
-            }
+            Text(
+                "🛒 OPEN SHOP"
+            )
         }
     }
 }
 
+}
 
 @Composable
 fun ServerScreen() {
 
-    LazyColumn(
+LazyColumn(
 
-        modifier = Modifier
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp),
 
-            .fillMaxSize()
+    verticalArrangement =
+        Arrangement.spacedBy(14.dp)
+) {
 
-            .padding(20.dp),
+    item {
 
-        verticalArrangement =
-            Arrangement.spacedBy(14.dp)
-    ) {
+        Text(
 
+            text = "🎮 Server",
 
-        item {
+            style =
+                MaterialTheme.typography.headlineMedium,
 
-            Text(
+            fontWeight =
+                FontWeight.Bold
+        )
+    }
 
-                text = "🎮 Server",
+    item {
 
-                style =
-                    MaterialTheme.typography.headlineMedium,
+        InfoCard(
 
-                fontWeight =
-                    FontWeight.Bold
-            )
-        }
+            "Server IP",
 
+            SERVER_IP,
 
-        item {
+            "Use this address in Minecraft"
+        )
+    }
 
-            InfoCard(
+    item {
 
-                "Server IP",
+        InfoCard(
 
-                SERVER_IP,
+            "Mode",
 
-                "Use this address in Minecraft"
-            )
-        }
+            "ANIVI SMP",
 
+            "Survival • Lifesteal"
+        )
+    }
 
-        item {
+    item {
 
-            InfoCard(
+        InfoCard(
 
-                "Mode",
+            "Status",
 
-                "ANIVI SMP",
+            "Coming Soon",
 
-                "Survival • Lifesteal"
-            )
-        }
-
-
-        item {
-
-            InfoCard(
-
-                "Status",
-
-                "Coming Soon",
-
-                "Live status will be added later"
-            )
-        }
+            "Live status will be added later"
+        )
     }
 }
 
+}
 
 @Composable
 fun ShopScreen() {
 
-    LazyColumn(
+LazyColumn(
 
-        modifier = Modifier
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp),
 
-            .fillMaxSize()
+    verticalArrangement =
+        Arrangement.spacedBy(14.dp)
+) {
 
-            .padding(20.dp),
+    item {
 
-        verticalArrangement =
-            Arrangement.spacedBy(14.dp)
-    ) {
+        Text(
 
+            text = "🛒 ANIVI SHOP",
 
-        item {
+            style =
+                MaterialTheme.typography.headlineMedium,
 
-            Text(
+            fontWeight =
+                FontWeight.Bold
+        )
+    }
 
-                text = "🛒 ANIVI SHOP",
+    item {
 
-                style =
-                    MaterialTheme.typography.headlineMedium,
+        InfoCard(
 
-                fontWeight =
-                    FontWeight.Bold
-            )
-        }
+            "⭐ Custom Ranks",
 
+            "Coming Soon",
 
-        item {
+            "Buy ranks using in-game money"
+        )
+    }
 
-            InfoCard(
+    item {
 
-                "⭐ Custom Ranks",
+        InfoCard(
 
-                "Coming Soon",
+            "💎 Items",
 
-                "Buy ranks using in-game money"
-            )
-        }
+            "Coming Soon",
 
+            "Special items and rewards"
+        )
+    }
 
-        item {
+    item {
 
-            InfoCard(
+        InfoCard(
 
-                "💎 Items",
+            "🎁 Crates",
 
-                "Coming Soon",
+            "Coming Soon",
 
-                "Special items and rewards"
-            )
-        }
-
-
-        item {
-
-            InfoCard(
-
-                "🎁 Crates",
-
-                "Coming Soon",
-
-                "Special rewards"
-            )
-        }
+            "Special rewards"
+        )
     }
 }
 
+}
 
 @Composable
 fun RulesScreen() {
 
-    val rules = listOf(
+val rules = listOf(
 
-        "Respect all players and staff.",
+    "Respect all players and staff.",
 
-        "No cheating or unfair advantages.",
+    "No cheating or unfair advantages.",
 
-        "Do not spam the chat.",
+    "Do not spam the chat.",
 
-        "Do not grief other players.",
+    "Do not grief other players.",
 
-        "Do not abuse bugs or exploits.",
+    "Do not abuse bugs or exploits.",
 
-        "Follow staff instructions.",
+    "Follow staff instructions.",
 
-        "Have fun and enjoy ANIVI SMP!"
-    )
+    "Have fun and enjoy ANIVI SMP!"
+)
 
+LazyColumn(
 
-    LazyColumn(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp),
 
-        modifier = Modifier
+    verticalArrangement =
+        Arrangement.spacedBy(10.dp)
+) {
 
-            .fillMaxSize()
+    item {
 
-            .padding(20.dp),
+        Text(
 
-        verticalArrangement =
-            Arrangement.spacedBy(10.dp)
-    ) {
+            text = "📜 SERVER RULES",
 
+            style =
+                MaterialTheme.typography.headlineMedium,
 
-        item {
+            fontWeight =
+                FontWeight.Bold
+        )
+    }
+
+    items(rules.size) { index ->
+
+        Card(
+
+            modifier =
+                Modifier.fillMaxWidth()
+        ) {
 
             Text(
 
-                text = "📜 SERVER RULES",
-
-                style =
-                    MaterialTheme.typography.headlineMedium,
-
-                fontWeight =
-                    FontWeight.Bold
-            )
-        }
-
-
-        items(rules.size) { index ->
-
-
-            Card(
+                text =
+                    "• ${rules[index]}",
 
                 modifier =
-                    Modifier.fillMaxWidth()
-            ) {
-
-                Text(
-
-                    text =
-                        "• ${rules[index]}",
-
-                    modifier =
-                        Modifier.padding(16.dp)
-                )
-            }
+                    Modifier.padding(16.dp)
+            )
         }
     }
 }
 
+}
 
 @Composable
 fun InfoCard(
 
-    title: String,
+title: String,
 
-    value: String,
+value: String,
 
-    subtitle: String
+subtitle: String
 
 ) {
 
-    Card(
+Card(
+
+    modifier =
+        Modifier.fillMaxWidth()
+) {
+
+    Column(
 
         modifier =
-            Modifier.fillMaxWidth()
+            Modifier.padding(18.dp)
     ) {
 
+        Text(
 
-        Column(
+            text = title,
 
+            style =
+                MaterialTheme.typography.labelLarge
+        )
+
+        Spacer(
             modifier =
-                Modifier.padding(18.dp)
-        ) {
+                Modifier.height(4.dp)
+        )
 
+        Text(
 
-            Text(
-                text = title,
+            text = value,
 
-                style =
-                    MaterialTheme.typography.labelLarge
-            )
+            style =
+                MaterialTheme.typography.titleLarge,
 
+            fontWeight =
+                FontWeight.Bold
+        )
 
-            Spacer(
-                modifier =
-                    Modifier.height(4.dp)
-            )
+        Spacer(
+            modifier =
+                Modifier.height(4.dp)
+        )
 
-
-            Text(
-
-                text = value,
-
-                style =
-                    MaterialTheme.typography.titleLarge,
-
-                fontWeight =
-                    FontWeight.Bold
-            )
-
-
-            Spacer(
-                modifier =
-                    Modifier.height(4.dp)
-            )
-
-
-            Text(
-                text = subtitle
-            )
-        }
+        Text(
+            text = subtitle
+        )
     }
 }
 
+}
 
 fun copyIP(context: Context) {
 
-    val clipboard =
+val clipboard =
 
-        context.getSystemService(
-            Context.CLIPBOARD_SERVICE
-        ) as ClipboardManager
+    context.getSystemService(
+        Context.CLIPBOARD_SERVICE
+    ) as ClipboardManager
 
+clipboard.setPrimaryClip(
 
-    clipboard.setPrimaryClip(
+    ClipData.newPlainText(
 
-        ClipData.newPlainText(
+        "ANIVI SMP IP",
 
-            "ANIVI SMP IP",
-
-            SERVER_IP
-        )
+        SERVER_IP
     )
+)
 
+Toast.makeText(
 
-    Toast.makeText(
+    context,
 
-        context,
+    "Server IP copied!",
 
-        "Server IP copied!",
+    Toast.LENGTH_SHORT
 
-        Toast.LENGTH_SHORT
+).show()
 
-    ).show()
 }
-
 
 fun openLink(
 
-    context: Context,
+context: Context,
 
-    url: String
+url: String
 
 ) {
 
-    val intent = Intent(
+val intent = Intent(
 
-        Intent.ACTION_VIEW,
+    Intent.ACTION_VIEW,
 
-        Uri.parse(url)
-    )
+    Uri.parse(url)
+)
 
+context.startActivity(intent)
 
-    context.startActivity(intent)
 }
