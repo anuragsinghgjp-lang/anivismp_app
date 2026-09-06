@@ -245,7 +245,7 @@ fun AuthScreen(
                             return@Button
                         }
                         isLoading = true
-                        authManager.login(email, password) { success, msg ->
+                        authManager.login(email.trim(), password) { success, msg ->
                             isLoading = false
                             if (success) onAuthSuccess() else errorMessage = msg ?: "Login failed"
                         }
