@@ -521,8 +521,7 @@ fun HomeScreen(
             )
 
             Button(
-                onClick = {
-                    // Spin Wheel will be opened here
+               onClick = onSpinWheel,
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
