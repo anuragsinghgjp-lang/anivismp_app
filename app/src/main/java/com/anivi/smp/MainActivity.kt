@@ -432,6 +432,11 @@ fun MainAppScreen(
                 1 -> ServerScreen()
                 2 -> ShopScreen()
                 3 -> RulesScreen()
+                4 -> SpinWheelScreen(
+    onBack = {
+        selectedTab = 0
+    }
+)
             }
         }
     }
